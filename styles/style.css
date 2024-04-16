@@ -153,7 +153,7 @@ select {
   backdrop-filter: blur(3px);
   z-index: 1;
 }
-.hidden{
+.hidden {
   display: none;
 }
 .modal {
@@ -238,4 +238,3 @@ select {
   color: var(--primaryColor);
   border: 1px solid var(--primaryColor);
 }
-
