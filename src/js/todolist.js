@@ -4,8 +4,11 @@ const todoInput = document.querySelector(".todo-input");
 const todoForm = document.querySelector(".todo-form");
 const todoList = document.querySelector(".todolist");
 const selectFilter = document.querySelector(".filter-todos");
+const editTodoInput = document.getElementById("edit-todo");
+const updateTodoBtn = document.getElementById("update-todo");
 
 // Events
+updateTodoBtn.addEventListener("click", updateTodo);
 todoForm.addEventListener("submit", addNewTodo);
 selectFilter.addEventListener("change", (e) => {
   filterValue = e.target.value;
@@ -39,12 +42,15 @@ function createTodos(todos) {
             <span class="todo__createdAt">${new Date(
               todo.createdAt
             ).toLocaleDateString("fa-IR")}</span>
-            <button class="todo__check" data-todo-id=${
-              todo.id
-            }><i class="far fa-check-square"></i></button>
             <button class="todo__remove" data-todo-id=${
               todo.id
             }><i class="far fa-trash-alt"></i></button>
+            <button onclick="openEditForm(event)" id="open-modal" class="todo__edit" data-todo-id=${
+              todo.id
+            }><i class="far fa-edit"></i></button>
+               <button class="todo__check" data-todo-id=${
+                 todo.id
+               }><i class="far fa-check-square"></i></button>
           </li>`;
   });
   todoList.innerHTML = result;
@@ -105,4 +111,28 @@ function saveTodo(todo) {
 }
 function saveAllTodos(todos) {
   localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+//edit todo
+
+function findOneTodo(id) {
+  const todos = getAllTodos();
+  const todo = todos.find((todo) => todo.id === id);
+  return todo;
+}
+
+let todoEditId;
+function openEditForm(e) {
+  todoEditId = Number(e.target.dataset.todoId);
+  const todoToEdit = findOneTodo(todoEditId);
+  editTodoInput.value = todoToEdit.title;
+  openModal();
+}
+
+function updateTodo(e) {
+  const todos = getAllTodos();
+  const todo = todos.find((todo) => todo.id === todoEditId);
+  todo.title = editTodoInput.value;
+  saveAllTodos(todos);
+  filterTodos();
 }
